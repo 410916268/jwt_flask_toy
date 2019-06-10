@@ -4,15 +4,20 @@ import user.userview as userview
 import talk.talkview as talkview
 import test.testview
 from flask_cors import *  # 导入模块
+import logging
+logging.basicConfig(filename='example.log',level=logging.DEBUG)
+logging.debug('This message should go to the log file')
+logging.info('So should this')
+logging.warning('And this, too')
 
-apk = Flask(__name__)
-apk.config['JWT_SECRET_KEY'] = 'super-secret'  # Change this!
-jwt = JWTManager(apk)
+app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = 'super-secret'  # Change this!
+jwt = JWTManager(app)
 
-apk.register_blueprint(userview.user)
-apk.register_blueprint(talkview.talker1)
-apk.register_blueprint(test.testview.bp_test)
+app.register_blueprint(userview.user)
+app.register_blueprint(talkview.talker1)
+app.register_blueprint(test.testview.bp_test)
 
-CORS(apk, supports_credentials=True)  # 设置跨域
+CORS(app, supports_credentials=True)  # 设置跨域
 if __name__ == "__main__":
-    apk.run(debug=True,port=5000)
+    app.run(debug=True,port=5000)
