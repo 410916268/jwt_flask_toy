@@ -32,7 +32,8 @@ def talkToPeer():
         content = request.json.get('content')
         className = request.json.get('className')
         for user in ROOM_DICT[className]: # classmates = ROOM_DICT[className]
-            QUEUE_DICT[user] = queue.Queue()
+            if user not in QUEUE_DICT:
+                QUEUE_DICT[user] = queue.Queue()
             q = QUEUE_DICT[user]
             q.put([current_user, content])
             msg = "Talk to Peer successfully!"
