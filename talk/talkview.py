@@ -14,10 +14,13 @@ def createRoom():
         if not request.is_json:
             return jsonify({'msg':"params is not a json!"})
         className = request.json.get('className')
-        classmates = request.json.get('classmates')  #['zhangsan','lisan']
-        ROOM_DICT[className] = classmates
+        classmates = request.json.get('classmates')  # "zhangsan,lisi"
+        ROOM_DICT[className] = classmates.split(",")#['zhangsan','lisi']
+        msg = "success"
     except Exception as e:
         print(e)
+        msg = "error"
+    return jsonify({"msg": msg})
 
 @talker1.route('/talkToPeer',methods=['POST'])
 @jwt_required
@@ -32,9 +35,11 @@ def talkToPeer():
             QUEUE_DICT[user] = queue.Queue()
             q = QUEUE_DICT[user]
             q.put([current_user, content])
-        return jsonify({"msg": "Talk to Peer successfully!"})
+            msg = "Talk to Peer successfully!"
     except Exception as E:
         print(E)
+        msg = "error"
+    return jsonify({"msg": msg})
 
 @talker1.route('/getMsg',methods=['Get'])
 @jwt_required
