@@ -5,6 +5,19 @@ import queue
 
 talker1 = Blueprint('talker1',__name__)
 QUEUE_DICT = {}
+ROOM_DICT = {}  #key 群名称  value 群成员列表
+
+@talker1.route('/createRoom',methods=['Post'])
+@jwt_required
+def createRoom():
+    try:
+        if not request.is_json:
+            return jsonify({'msg':"params is not a json!"})
+        className = request.json.get('className')
+        classmates = request.json.get('classmates')  #['zhangsan','lisan']
+        ROOM_DICT[className] = classmates
+    except Exception as e:
+        print(e)
 
 @talker1.route('/talkToPeer',methods=['POST'])
 @jwt_required
@@ -14,10 +27,8 @@ def talkToPeer():
         if not request.is_json:
             return jsonify({'msg':"params is not a json!"})
         content = request.json.get('content')
-        peer = request.json.get('peer')
-        # QUEUE_DICT[peer] = queue.Queue()
-        # QUEUE_DICT[current_user] = queue.Queue()
-        for user in [peer,current_user]:
+        className = request.json.get('className')
+        for user in ROOM_DICT[className]: # classmates = ROOM_DICT[className]
             QUEUE_DICT[user] = queue.Queue()
             q = QUEUE_DICT[user]
             q.put([current_user, content])
