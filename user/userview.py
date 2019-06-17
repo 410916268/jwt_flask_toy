@@ -1,7 +1,7 @@
-from flask import Blueprint, jsonify,request
+from flask import Blueprint, jsonify , request
 from flask_jwt_extended import  create_access_token
 user = Blueprint('user',__name__)
-users = {}
+users = {} #key username ; value User对象
 class User(object):
     def __init__(self,username, password):
         self.username = username

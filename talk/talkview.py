@@ -15,7 +15,7 @@ def createRoom():
             return jsonify({'msg':"params is not a json!"})
         className = request.json.get('className')
         classmates = request.json.get('classmates')  # "zhangsan,lisi"
-        ROOM_DICT[className] = classmates.split(",")#['zhangsan','lisi']
+        ROOM_DICT[className] = classmates.split(",") # ['zhangsan','lisi']
         msg = "success"
     except Exception as e:
         print(e)
@@ -30,10 +30,10 @@ def talkToPeer():
         if not request.is_json:
             return jsonify({'msg':"params is not a json!"})
         content = request.json.get('content')
-        className = request.json.get('className')
+        className = request.json.get('className')  # room2
         for user in ROOM_DICT[className]: # classmates = ROOM_DICT[className]
             if user not in QUEUE_DICT:
-                QUEUE_DICT[user] = queue.Queue()
+                QUEUE_DICT[user] = queue.Queue()  #key user ; value queue
             q = QUEUE_DICT[user]
             q.put([current_user, content])
             msg = "Talk to Peer successfully!"
